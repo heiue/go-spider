@@ -277,6 +277,14 @@ func (ctx *Context) GetOutputDB() *sql.DB {
 	return ctx.outputDB
 }
 
+func (ctx *Context) NextC() *colly.Collector {
+	return ctx.nextC
+}
+
+func (ctx *Context) C() *colly.Collector {
+	return ctx.c
+}
+
 func createFormReader(data map[string]string) io.Reader {
 	form := url.Values{}
 	for k, v := range data {

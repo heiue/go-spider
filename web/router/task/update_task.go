@@ -77,6 +77,7 @@ func UpdateTask(c *gin.Context) {
 	}
 	// update db
 	if err := task.Update(core.GetGormDB(),
+		model.TaskDBSchema.TaskName,
 		model.TaskDBSchema.TaskDesc, model.TaskDBSchema.CronSpec,
 		model.TaskDBSchema.OutputType, model.TaskDBSchema.OutputExportDBID,
 		model.TaskDBSchema.OptUserAgent, model.TaskDBSchema.OptMaxDepth,

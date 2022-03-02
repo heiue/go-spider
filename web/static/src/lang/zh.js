@@ -47,7 +47,8 @@ export default {
     edit: '修改',
     stop: '停止',
     start: '启动',
-    restart: '重启'
+    restart: '重启',
+    async: '开启异步'
   },
   exportdb: {
     add: '新建数据库',

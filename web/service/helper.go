@@ -1,6 +1,9 @@
 package service
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 	"regexp"
 	"strings"
 	"time"
@@ -94,6 +97,9 @@ func GetSpiderTaskByModel(task *model.Task) (*spider.Task, error) {
 	}
 	if urls := strings.TrimSpace(task.ProxyURLs); len(urls) > 0 {
 		config.ProxyURLs = strings.Split(urls, ",")
+	} else {
+		config.ProxyURLs = getProxyList()
+		config.ProxyURLs = []string{"http://1.180.156.226:65001/"}
 	}
 
 	return spider.NewTask(task.ID, *rule, config), nil
@@ -130,4 +136,32 @@ func autoMigrate(sdb *model.ExportDB, rule *spider.TaskRule) (err error) {
 
 	err = spider.AutoMigrateHack(db, rule).Error
 	return
+}
+
+func getProxyList() []string {
+	var proxy_urls []string
+	url := "http://127.0.0.1:9999/sql?query=SELECT%20*%20FROM%20proxy%20ORDER%20BY%20RAND()%20limit%2010"
+	client := &http.Client{}
+	res, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return proxy_urls
+	}
+	response, _ := client.Do(res)
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return proxy_urls
+	}
+	re_proxy := struct {
+		Err string `json:"err"`
+		Message []struct{
+			Id int `json:"id"`
+			Content string `json:"content"`
+		} `json:"message"`
+	}{}
+	err = json.Unmarshal(body, &re_proxy)
+
+	for _, item := range re_proxy.Message {
+		proxy_urls = append(proxy_urls, "http://" + item.Content)
+	}
+	return proxy_urls
 }

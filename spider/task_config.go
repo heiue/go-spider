@@ -69,7 +69,7 @@ type CSVConf struct {
 func newCollector(config TaskConfig) (*colly.Collector, error) {
 	opts := make([]func(*colly.Collector), 0)
 
-	opts = append(opts, colly.Async(true))
+	opts = append(opts, colly.Async(true)) // 修改是不是异步
 	if config.Option.MaxDepth > 1 {
 		opts = append(opts, colly.MaxDepth(config.Option.MaxDepth))
 	}

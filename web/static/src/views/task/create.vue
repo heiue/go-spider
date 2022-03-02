@@ -4,7 +4,7 @@
       <el-col :span="12">
         <el-form ref="form" :model="form" :rules="rules" label-position="right" label-width="150px">
           <el-form-item :label="$t('task.name')" prop="task_name">
-            <el-input v-model="form.task_name" placeholder="please enter the content" :disabled="routeID"></el-input>
+            <el-input v-model="form.task_name" placeholder="please enter the content"></el-input>
           </el-form-item>
           <el-form-item :label="$t('task.rule')" prop="task_rule_name">
             <el-select v-model="form.task_rule_name" placeholder="please select" :disabled="routeID">
@@ -76,6 +76,9 @@
           <el-form-item :label="$t('task.limitPara')">
             <el-input-number v-model="form.limit_parallelism" :controls="false"></el-input-number>
           </el-form-item>
+          <el-form-item :label="$t('task.async')">
+            <el-checkbox v-model="form.async"></el-checkbox>
+          </el-form-item>
 
           <el-form-item>
             <el-button type="primary" @click="on_submit_form" :loading="on_submit_loading" :disabled="submit_disable">{{routeID ? $t('task.update') : $t('task.add')}}</el-button>
@@ -102,7 +105,8 @@ export default {
         limit_enable: true,
         auto_migrate: true,
         limit_parallelism: 1,
-        opt_request_timeout: 10
+        opt_request_timeout: 10,
+        async: false
       },
       showExportDB: false,
       ruleOpts: [],

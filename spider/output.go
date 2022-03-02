@@ -140,8 +140,10 @@ func (ctx *Context) outputToCSV(row map[int]interface{}, outputFields []string, 
 	for i := 0; i < len(outputFields); i++ {
 		record = append(record, fmt.Sprintf("%v", row[i]))
 	}
-
-	return errors.WithStack(cw.Write(record))
+	//fmt.Printf("csv output : %+v \n", record)
+	err := cw.Write(record)
+	cw.Flush()
+	return errors.WithStack(err)
 }
 
 func createCSVFileIfNeeded(csvdir, csvfile string, outputFields []string) error {
